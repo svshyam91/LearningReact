@@ -1,39 +1,22 @@
-import React, {useState} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
-// Function based component 
-const Person = (props) => {
-
-  // 'useState()' returns array of 2 elements in which first element is state and 
-  // second element is function to change that state.
-  const [personState, setPersonState] = useState({
-    name: "Shyam Kumar", 
-    age: 23,
-  });
-
-  const [hobbiesState, setHobbiesState] = useState({
-    hobbies: 'Programming, Cricket',
-  })
-
-  // Change state 
-  const changeNameHandler = () => {
-    setPersonState({
-      name: "Mahindra Singh Dhoni",
-      age: 38
-    });
-
-    setHobbiesState({
-      hobbies: 'Programming, Cricket, Music'
-    });
+// Clock using props
+class Clock extends React.Component {
+  render() {
+    return(
+      <div>
+        <p>Current Time: {this.props.date.getDate()}-{this.props.date.getMonth()}-{this.props.date.getFullYear()} {this.props.date.getHours()}:
+        {this.props.date.getMinutes()}:{this.props.date.getSeconds()}</p>
+      </div>
+    )
   }
-
-  return(
-    <div>
-      <p>My name is {personState.name} and my age is {personState.age}. </p>
-      <p>My hobbies are: {hobbiesState.hobbies}</p>
-      <button onClick={changeNameHandler}>Change Name</button>
-    </div>
-  )
 } 
 
-ReactDOM.render(<Person name="Shyam" age="23" />, document.getElementById('root'));
+const updateTime = () => {
+  ReactDOM.render(<Clock date={new Date()} />, document.getElementById('root'));
+}
+
+setInterval(() => {
+  updateTime();
+}, 1000);
