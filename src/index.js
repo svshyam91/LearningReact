@@ -3,20 +3,30 @@ import ReactDOM from 'react-dom'
 
 // Clock using props
 class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: new Date(),
+    }
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(()=>{
+      this.setState({date: new Date()})
+    },1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
   render() {
     return(
       <div>
-        <p>Current Time: {this.props.date.getDate()}-{this.props.date.getMonth()}-{this.props.date.getFullYear()} {this.props.date.getHours()}:
-        {this.props.date.getMinutes()}:{this.props.date.getSeconds()}</p>
+        <p>Current Time: {this.state.date.toLocaleTimeString()}</p>
       </div>
     )
   }
 } 
 
-const updateTime = () => {
-  ReactDOM.render(<Clock date={new Date()} />, document.getElementById('root'));
-}
-
-setInterval(() => {
-  updateTime();
-}, 1000);
+ReactDOM.render(<Clock />, document.getElementById('root'));
