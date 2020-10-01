@@ -1,0 +1,14 @@
+.person {
+    font-family: sans-serif;
+    text-align: center;
+    border: 1px solid rgb(133, 121, 121);
+    border-radius: 10px;
+    margin: 5px;
+  }
+  button {
+    padding: 5px;
+    background-color: rgb(87, 202, 20);
+    border-radius: 5px;
+    margin: 10px;
+  }
+  
