@@ -39,18 +39,22 @@ class Family extends React.Component {
     this.setState({togglePerson: !this.state.togglePerson})
   }
   render() {
+    let person = null;
+
+    if(this.state.togglePerson) {
+        person = (
+            <div>
+                <Person name="Shyam" yearOfBirth="1997" gender="male" />
+                <Person name="Vishwanath" yearOfBirth="1952" gender="male" />
+                <Person name="Indrawati" yearOfBirth="1960" gender="female" />
+                <Person name="Suneel" yearOfBirth="1993" gender="male" />
+            </div>
+        );
+    }
     return(
       <div>
         <button onClick={this.togglePersonHandler.bind(this)}>Show/Hide</button> 
-        { this.state.togglePerson ? 
-          <div>
-            <Person name="Shyam" yearOfBirth="1997" gender="male" />
-            <Person name="Vishwanath" yearOfBirth="1952" gender="male" />
-            <Person name="Indrawati" yearOfBirth="1960" gender="female" />
-            <Person name="Suneel" yearOfBirth="1993" gender="male" />
-          </div>
-         : null
-        }
+        {person}
       </div>
     )
   }
