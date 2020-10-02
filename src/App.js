@@ -1,60 +1,38 @@
 import React from "react";
 import "./App.css";
 
-// This program demostrate conditional rendering 
-
-class Person extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: props.name,
-      yearOfBirth: props.yearOfBirth,
-      gender: props.gender,
-    }
-  }
-
-  calculateAge() {
-    return 2020-this.state.yearOfBirth;
-  }
-
-  render() {
-    return(
-      <div className='person'>
-        <p>Name: {this.state.name}</p>
-        <p>Age: {this.calculateAge()}</p>
-        <p>Gender: {this.state.gender}</p>
-      </div>
-    )
-  }
-}
+// This program uses map() to print list
 
 class Family extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      togglePerson: false
+      persons: [
+        {name: 'Shyam', yearOfBirth: 1997, gender: 'male'},
+        {name: 'Vishwanath', yearOfBirth: 1952, gender: 'male'},
+        {name: 'Indrawati', yearOfBirth: 1960, gender: 'female'},
+        {name: 'Suneel', yearOfBirth: 1993, gender: 'male'}
+      ]
     }
   }
-  togglePersonHandler() {
-    this.setState({togglePerson: !this.state.togglePerson})
-  }
-  render() {
-    let person = null;
 
-    if(this.state.togglePerson) {
-        person = (
-            <div>
-                <Person name="Shyam" yearOfBirth="1997" gender="male" />
-                <Person name="Vishwanath" yearOfBirth="1952" gender="male" />
-                <Person name="Indrawati" yearOfBirth="1960" gender="female" />
-                <Person name="Suneel" yearOfBirth="1993" gender="male" />
-            </div>
-        );
-    }
+  calculateAge(yearOfBirth) {
+    return  2020-yearOfBirth;
+  }
+
+  render() {
+    const persons = this.state.persons.map((person) => {
+        return(<div className='person'>
+          <div>Name: {person.name}</div>
+          <div>year Of Birth: {person.yearOfBirth}</div>
+          <div>Gender: {person.gender}</div>
+          <div>Age: {this.calculateAge(person.yearOfBirth)}</div><br></br><br></br>
+        </div>)
+    });
+
     return(
       <div>
-        <button onClick={this.togglePersonHandler.bind(this)}>Show/Hide</button> 
-        {person}
+        {persons}
       </div>
     )
   }
