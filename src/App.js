@@ -1,24 +1,24 @@
 import React from "react";
 import "./App.css";
 
-// Form as Controlled Component
+// Form using Textarea 
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      username: '',
+      comment: '',
     }
-    this.usernameHandler = this.usernameHandler.bind(this);
+    this.textareaHandler = this.textareaHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
   }
 
-  usernameHandler(event) {
-    this.setState({username: event.target.value});
+  textareaHandler(event) {
+    this.setState({comment: event.target.value});
   }
 
   submitHandler(event) {
-    alert('User entered: '+this.state.username);
+    alert('User entered: '+this.state.comment);
     event.preventDefault();
   }
 
@@ -26,11 +26,12 @@ class App extends React.Component {
    return(
     <div>
       <form onSubmit={this.submitHandler}>
-        <input 
-          type='text' 
-          name='username' 
-          value={this.state.username}
-          onChange={this.usernameHandler}/>
+        <label>
+          Essay:
+          <textarea  
+            value={this.state.comment}
+            onChange={this.textareaHandler} />
+        </label>
         <input type='submit' value='submit' />
       </form>
     </div>
