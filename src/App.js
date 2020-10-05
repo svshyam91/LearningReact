@@ -1,81 +1,40 @@
 import React from "react";
 import "./App.css";
 
-// Udemy course Exercise, Learn display dynamic content, passing function reference, two-way binding, 
-// conditional rendering, rendering list of items
-
-function ValidationComponent(props) {
-  const minLength = 5;
-  if (props.usernameLength > minLength) {
-    return <p>Text long enough!!</p>;
-  } else {
-    return <p>Text too short!!</p>;
-  }
-}
-
-function CharComponent(props) {
-  const style = {
-    display: "inline-block",
-    padding: "16px",
-    textAlign: "center",
-    margin: "16px",
-    border: "1px solid black"
-  };
-  return (
-    <div style={style} onClick={props.clicked}>
-      {props.character}
-    </div>
-  );
-}
+// Form as Controlled Component
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      username: ''
-    };
+      username: '',
+    }
+    this.usernameHandler = this.usernameHandler.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
-  charHandler = (index) => {
-    let usernameArr = this.state.username.split("");
-    
-    usernameArr.splice(index, 1);
-    const newUsername = usernameArr.join("");
-    this.setState({ username: newUsername });
-  };
+  usernameHandler(event) {
+    this.setState({username: event.target.value});
+  }
 
-  changeUsernameHandler = (e) => {
-    const username = e.target.value;
-
-    this.setState({username: username});
-  };
+  submitHandler(event) {
+    alert('User entered: '+this.state.username);
+    event.preventDefault();
+  }
 
   render() {
-    const usernameArray = this.state.username.split("");
-    const charCompItems = usernameArray.map((char, index) => {
-      return (
-        <CharComponent
-          character={char}
-          index={index}
-          clicked={this.charHandler.bind(this,index)}
-        />
-      );
-    });
-    return (
-      <div>
-        Enter Username:
-        <input
-          type="text"
-          name="username"
-          onChange={this.changeUsernameHandler}
+   return(
+    <div>
+      <form onSubmit={this.submitHandler}>
+        <input 
+          type='text' 
+          name='username' 
           value={this.state.username}
-        />
-        <p>Username: {this.state.username}</p>
-        <br />
-        <ValidationComponent usernameLength={this.state.username.length} />
-        {charCompItems}
-      </div>
-    );
+          onChange={this.usernameHandler}/>
+        <input type='submit' value='submit' />
+      </form>
+    </div>
+   )
   }
 }
 
