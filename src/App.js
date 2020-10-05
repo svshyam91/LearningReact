@@ -1,68 +1,82 @@
 import React from "react";
 import "./App.css";
 
-// Udemy course Exercise, Learn display dynamic content, passing function reference, two-way binding
+// Udemy course Exercise, Learn display dynamic content, passing function reference, two-way binding, 
+// conditional rendering, rendering list of items
 
-class UserInput extends React.Component {
-  render() {
-    return(
-      <div>
-        Enter Username: <input name="inputName" onChange={this.props.click} value={this.props.currentUser}></input>
-      </div>
-    )
+function ValidationComponent(props) {
+  const minLength = 5;
+  if (props.usernameLength > minLength) {
+    return <p>Text long enough!!</p>;
+  } else {
+    return <p>Text too short!!</p>;
   }
 }
 
-class UserOutput extends React.Component {
-  render() {
-    return(
-      <div>
-        Output:
-        <p>My name is {this.props.username}</p>
-        <p>I live in Lucknow.</p>
-      </div>
-    )
-  }
+function CharComponent(props) {
+  const style = {
+    display: "inline-block",
+    padding: "16px",
+    textAlign: "center",
+    margin: "16px",
+    border: "1px solid black"
+  };
+  return (
+    <div style={style} onClick={props.clicked}>
+      {props.character}
+    </div>
+  );
 }
-
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      username: "Shyam",
-    }
+      username: ''
+    };
   }
+
+  charHandler = (index) => {
+    let usernameArr = this.state.username.split("");
+    
+    usernameArr.splice(index, 1);
+    const newUsername = usernameArr.join("");
+    this.setState({ username: newUsername });
+  };
 
   changeUsernameHandler = (e) => {
     const username = e.target.value;
+
     this.setState({username: username});
-  }
+  };
 
   render() {
-    return(
+    const usernameArray = this.state.username.split("");
+    const charCompItems = usernameArray.map((char, index) => {
+      return (
+        <CharComponent
+          character={char}
+          index={index}
+          clicked={this.charHandler.bind(this,index)}
+        />
+      );
+    });
+    return (
       <div>
-        <ol>
-          <li>Create TWO new components: UserInput and UserOutput</li>
-          <li>UserInput should hold an input element, UserOutput two paragraphs</li>
-          <li>Output multiple UserOutput components in the App component (any paragraph texts of your choice)</li>
-          <li>Pass a username (of your choice) to UserOutput via props and display it there</li>
-          <li>Add state to the App component (=> the username) and pass the username to the UserOutput component</li>
-          <li>Add a method to manipulate the state (=> an event-handler method)</li>
-          <li>Pass the event-handler method reference to the UserInput component and bind it to the input-change event</li>
-          <li>Ensure that the new input entered by the user overwrites the old username passed to UserOutput</li>
-          <li>Add two-way-binding to your input (in UserInput) to also display the starting username</li>
-          <li>Add styling of your choice to your components/ elements in the components - both with inline styles and stylesheets</li>
-        </ol>
-
-        <UserOutput username={this.state.username}/>
-        <UserOutput username="Suneel"/>
-        <UserInput click={this.changeUsernameHandler} currentUser={this.state.username}/>
-
+        Enter Username:
+        <input
+          type="text"
+          name="username"
+          onChange={this.changeUsernameHandler}
+          value={this.state.username}
+        />
+        <p>Username: {this.state.username}</p>
+        <br />
+        <ValidationComponent usernameLength={this.state.username.length} />
+        {charCompItems}
       </div>
-    )
+    );
   }
 }
 
 export default App;
-
