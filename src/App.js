@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 
-// Form with multiple elements with common handler
+// Form using Bootstrap with simple validation 
 
 class App extends React.Component {
   constructor() {
@@ -10,8 +10,9 @@ class App extends React.Component {
       username: "",
       age: "",
       pass: "",
-      comment: "",
-      favColor: ""
+      favColor: "",
+      error: false,
+      errorMssg: ""
     };
     this.changeHandler = this.changeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
@@ -22,51 +23,72 @@ class App extends React.Component {
   }
 
   submitHandler(event) {
-    alert("User's Fav. Color: " + this.state.favColor);
     event.preventDefault();
+    // Validate input values
+    if(this.state.username === "" || this.state.age === "" || this.state.pass === "" || this.state.favColor === "") {
+      this.setState({error: true, errorMssg: "Fill all fields."});
+    }
+    else {
+      alert("Your form is successfully uploaded.");
+      this.setState({error:false})
+    }
+    // alert("User's Fav. Color: " + this.state.favColor);
+    
   }
 
   render() {
+    let errorDiv;
+    if(this.state.error) {
+      errorDiv = (
+        <div className="alert alert-primary alert-dismissible">{this.state.errorMssg}
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      );
+    }
     return (
       <div>
         <form onSubmit={this.submitHandler}>
-          <label>
-            Username:
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.changeHandler}
-            />
-          </label>
-          <br />
+          {errorDiv}
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+              <input className="form-control"
+                type="text"
+                name="username"
+                id="username"
+                value={this.state.username}
+                onChange={this.changeHandler}
+              />
+          </div>
 
-          <label>
-            Age:
+          <div className="form-group">
+            <label htmlFor="age">Age:</label>
             <input
               type="number"
+              className="form-control"
               name="age"
               value={this.state.age}
               onChange={this.changeHandler}
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Password:
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
+              className="form-control"
               name="pass"
               value={this.state.pass}
               onChange={this.changeHandler}
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Select your favourite Color:
+          <div className="form-group">
+            <label htmlFor="favColor">Favourite Color:</label>
             <select
               name="favColor"
+              className="form-control"
               value={this.state.favColor}
               onChange={this.changeHandler}
             >
@@ -77,8 +99,8 @@ class App extends React.Component {
               <option>Black</option>
               <option>Indigo</option>
             </select>
-          </label>
-          <input type="submit" value="submit" />
+          </div>
+          <input type="submit" className="btn btn-block btn-primary" value="Submit" />
         </form>
       </div>
     );
