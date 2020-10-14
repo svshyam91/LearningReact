@@ -7,60 +7,123 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      username: "",
-      age: "",
-      pass: "",
-      favColor: "",
-      error: false,
-      errorMssg: ""
+      favColors: ['red', 'green', 'blue', 'white', 'black', 'indigo'],
+      fields: {
+        username: '',
+        age: '',
+        password: '',
+        favColor: ''
+      },
+      errors: {
+        username: '',
+        age: '',
+        password: '',
+        favColor: ''
+      }
     };
     this.changeHandler = this.changeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
   }
 
+
+  validationHandler() {
+    let fields = this.state.fields;
+    let errors = {
+      username: '',
+      age: '',
+      password: '',
+      favColor: ''
+    };
+    let formIsValid = true;
+
+    //Username
+    if(fields.username === '') {
+      formIsValid = false;
+      console.log('This is true')
+      errors.username = 'Username cannot be empty.'; 
+    }
+    else if(typeof fields.username !== 'undefined') {
+      if(!fields.username.match(/^[a-zA-Z]+$/)) {
+        formIsValid = false;
+        errors.username = 'Username should only contain letters.';
+      }
+    }
+
+    // Age
+    if(fields.age === '') {
+      formIsValid = false;
+      errors.age = 'Age cannot be empty';
+    }
+    else if(typeof fields.age !== 'undefined') {
+      if(!fields.age.match(/^[0-9][0-9]$/)) {
+        formIsValid = false;
+        errors.age = 'Age must be between 0 and 99';
+      }
+    }
+
+    //Password
+    if(fields.password === '') {
+      formIsValid = false;
+      errors.password = 'Password cannot be empty';
+    }
+    else if(typeof fields.password !== 'undefined') {
+      if(!fields.password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/)) {
+        /* Regular expression description: 
+          Password must be at least 4 characters, no more than 8 characters, 
+          and must include at least one upper case letter, one lower case letter, 
+          and one numeric digit. */
+
+        formIsValid = false;
+        errors.password = 'Password must must be at least 4 characters, no more than 8 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.';
+      }
+    }
+
+    // Favourite Color
+    if(fields.favColor === '') {
+      formIsValid = false;
+      errors.favColor = 'Please select your favourite color';
+    }
+    else if(typeof fields.favColor !== 'undefined') {
+      if(!this.state.favColors.includes(fields.favColor)) {
+        formIsValid = false;
+        errors.favColor = 'Invalid value of Color';
+      }
+    }
+
+    this.setState({errors: errors});
+    return formIsValid;
+  }
+
   changeHandler(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    let fields = this.state.fields;
+    fields[event.target.name] = event.target.value;
+    this.setState({fields: fields});
   }
 
   submitHandler(event) {
     event.preventDefault();
-    // Validate input values
-    if(this.state.username === "" || this.state.age === "" || this.state.pass === "" || this.state.favColor === "") {
-      this.setState({error: true, errorMssg: "Fill all fields."});
-    }
-    else {
+    if(this.validationHandler()) {
       alert("Your form is successfully uploaded.");
-      this.setState({error:false})
-    }
-    // alert("User's Fav. Color: " + this.state.favColor);
-    
+    } 
   }
 
   render() {
-    let errorDiv;
-    if(this.state.error) {
-      errorDiv = (
-        <div className="alert alert-primary alert-dismissible">{this.state.errorMssg}
-          <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      );
-    }
     return (
       <div>
+        <h2 className="h2">Sign Up Form</h2>
         <form onSubmit={this.submitHandler}>
-          {errorDiv}
+          
           <div className="form-group">
             <label htmlFor="username">Username:</label>
               <input className="form-control"
                 type="text"
                 name="username"
                 id="username"
-                value={this.state.username}
+                value={this.state.fields.username}
                 onChange={this.changeHandler}
               />
           </div>
+          <small className="small">{this.state.errors.username}</small>
 
           <div className="form-group">
             <label htmlFor="age">Age:</label>
@@ -68,38 +131,39 @@ class App extends React.Component {
               type="number"
               className="form-control"
               name="age"
-              value={this.state.age}
+              value={this.state.fields.age}
               onChange={this.changeHandler}
             />
           </div>
+          <small>{this.state.errors.age}</small>
 
           <div className="form-group">
             <label htmlFor="password">Password:</label>
             <input
               type="password"
               className="form-control"
-              name="pass"
-              value={this.state.pass}
+              name="password"
+              value={this.state.fields.password}
               onChange={this.changeHandler}
             />
           </div>
+          <small>{this.state.errors.password}</small>
 
           <div className="form-group">
             <label htmlFor="favColor">Favourite Color:</label>
             <select
               name="favColor"
               className="form-control"
-              value={this.state.favColor}
+              value={this.state.fields.favColor}
               onChange={this.changeHandler}
             >
-              <option>Red</option>
-              <option>Green</option>
-              <option>Blue</option>
-              <option>White</option>
-              <option>Black</option>
-              <option>Indigo</option>
+              {this.state.favColors.map((value,index) => {
+                return <option key={index} value={value}>{value}</option>
+              })}
+
             </select>
           </div>
+          <small>{this.state.errors.favColor}</small>
           <input type="submit" className="btn btn-block btn-primary" value="Submit" />
         </form>
       </div>
