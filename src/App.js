@@ -55,7 +55,7 @@ class App extends React.Component {
       errors.age = 'Age cannot be empty';
     }
     else if(typeof fields.age !== 'undefined') {
-      if(!fields.age.match(/^[0-9][0-9]$/)) {
+      if(!fields.age.match(/^[0-9].{0,2}$/)) {
         formIsValid = false;
         errors.age = 'Age must be between 0 and 99';
       }
@@ -74,7 +74,7 @@ class App extends React.Component {
           and one numeric digit. */
 
         formIsValid = false;
-        errors.password = 'Password must must be at least 4 characters, no more than 8 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.';
+        errors.password = 'Password must be at least 4 characters, no more than 8 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit.';
       }
     }
 
@@ -112,7 +112,7 @@ class App extends React.Component {
       <div>
         <h2 className="h2">Sign Up Form</h2>
         <form onSubmit={this.submitHandler}>
-          
+
           <div className="form-group">
             <label htmlFor="username">Username:</label>
               <input className="form-control"
